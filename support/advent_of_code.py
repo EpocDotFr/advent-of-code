@@ -22,10 +22,10 @@ class Puzzle:
             self.INPUT_URL.format(year=self.year, day=self.day)
         )
 
-    def answer(self, answer):
+    def answer(self, level, answer):
         data = {
             'answer': answer,
-            'level': 1,
+            'level': level,
         }
 
         response = self.call(

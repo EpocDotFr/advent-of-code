@@ -4,6 +4,9 @@ puzzle = advent_of_code.Puzzle(2015, 1)
 
 input = puzzle.fetch()
 
-answer = ''
+up_count = input.count('(')
+down_count = input.count(')')
 
-print(puzzle.answer(answer))
+answer = up_count - down_count
+
+print(puzzle.answer(1, answer))
