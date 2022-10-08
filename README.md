@@ -20,4 +20,6 @@ Copy the `.env.example` file to `.env` and fill in the configuration parameters:
 
 ## Usage
 
-Simply execute one of the scripts named after the corresponding year / day (e.g `python 2015_1.py`).
+````shell
+$ python run.py year day [level]
+````
