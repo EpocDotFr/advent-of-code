@@ -34,7 +34,14 @@ class Puzzle:
             data=data
         )
 
-        return 'Wrong.' if 'That\'s not the right answer' in response else 'Correct!'
+        if 'That\'s not the right answer' in response:
+            return 'Wrong.'
+        elif 'Did you already complete it?' in response:
+            return 'Already completed.'
+        elif 'That\'s the right answer' in response:
+            return 'Completed!'
+        else:
+            return 'Error.'
 
     def call(self, method, url, data=None):
         cookies = {
