@@ -18,7 +18,7 @@ class Puzzle:
         self.session_id = session_id or env.str('SESSION_ID')
 
     def fetch(self):
-        input_cache_year_dir = os.path.join('inputs', self.year)
+        input_cache_year_dir = os.path.join('inputs', str(self.year))
 
         os.makedirs(input_cache_year_dir, exist_ok=True)
 
