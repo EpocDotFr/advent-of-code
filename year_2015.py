@@ -24,12 +24,15 @@ class Day1:
 
 class Day2:
     @staticmethod
+    def iter_input(input):
+        for box in input.splitlines():
+            yield [int(d) for d in box.strip().split('x')]
+
+    @staticmethod
     def level_1(input):
         computed = []
 
-        for box in input.splitlines():
-            l, w, h = [int(d) for d in box.strip().split('x')]
-
+        for l, w, h in Day2.iter_input(input):
             computed.append(
                 2 * l * w + 2 * w * h + 2 * h * l + min([l * w, w * h, h * l])
             )
@@ -40,9 +43,7 @@ class Day2:
     def level_2(input):
         computed = []
 
-        for box in input.splitlines():
-            l, w, h = [int(d) for d in box.strip().split('x')]
-
+        for l, w, h in Day2.iter_input(input):
             d = [l, w, h]
 
             lowest_1 = min(d)
