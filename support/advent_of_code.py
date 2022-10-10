@@ -1,5 +1,6 @@
 from environs import Env
 import requests
+import os
 
 requests = requests.Session()
 
@@ -17,10 +18,25 @@ class Puzzle:
         self.session_id = session_id or env.str('SESSION_ID')
 
     def fetch(self):
-        return self.call(
+        input_cache_year_dir = os.path.join('inputs', self.year)
+
+        os.makedirs(input_cache_year_dir, exist_ok=True)
+
+        input_cache_file = os.path.join(input_cache_year_dir, f'{self.day}.txt')
+
+        if os.path.isfile(input_cache_file):
+            with open(input_cache_file, 'r') as f:
+                return f.read()
+
+        input = self.call(
             'GET',
             self.INPUT_URL.format(year=self.year, day=self.day)
         )
+
+        with open(input_cache_file, 'w') as f:
+            f.write(input)
+
+        return input
 
     def answer(self, answer, level):
         data = {
