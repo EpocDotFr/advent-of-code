@@ -12,25 +12,18 @@ def run():
     args = arg_parser.parse_args()
 
     try:
-        year_module = importlib.import_module(f'year_{args.year}')
+        year_day_module = importlib.import_module(f'year_{args.year}.day_{args.day}')
     except ImportError:
-        print(f'Year not available yet: {args.year}')
+        print(f'Year / day not available yet: {args.year}/{args.day}')
 
-        exit()
-
-    try:
-        day_class = getattr(year_module, f'Day{args.day}')
-    except AttributeError:
-        print(f'Day not available yet: {args.day}')
-
-        exit()
+        return
 
     try:
-        level_method = getattr(day_class, f'level_{args.level}')
+        level_method = getattr(year_day_module, f'level_{args.level}')
     except AttributeError:
-        print(f'Level not available yet: {args.level}')
+        print(f'Level not available yet for {args.year}/{args.day}: {args.level}')
 
-        exit()
+        return
 
     puzzle = advent_of_code.Puzzle(args.year, args.day)
 
