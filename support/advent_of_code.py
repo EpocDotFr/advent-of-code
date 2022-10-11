@@ -57,7 +57,7 @@ class Puzzle:
         elif 'That\'s the right answer' in response:
             return 'Completed!'
         else:
-            return 'Error.'
+            return 'Error (Have you reached the rate limit? Did you submit an answer?).'
 
     def call(self, method, url, data=None):
         cookies = {
