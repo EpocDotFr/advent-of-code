@@ -2,7 +2,7 @@ def str2int(value):
     return int(value) if value.isdecimal() else value
 
 
-def iterinstructions(input):
+def iterinput(input):
     for instruction in input.splitlines():
         operation, destination = instruction.split(' -> ', maxsplit=1)
         destination = str2int(destination)
@@ -15,36 +15,28 @@ def iterinstructions(input):
 
             yield 'set', value, destination, None
         elif len(operation_parts) == 2:
-            gate, source = operation_parts
-            gate = gate.lower()
+            op, source = operation_parts
+            op = op.lower()
             source = str2int(source)
 
-            yield gate, source, destination, None
+            yield op, source, destination, None
         elif len(operation_parts) == 3:
-            left, gate, right = operation_parts
-            gate = gate.lower()
+            left, op, right = operation_parts
+            op = op.lower()
             left, right = str2int(left), str2int(right)
 
-            yield gate, left, right, destination
+            yield op, left, right, destination
 
 
 def level_1(input):
-    circuit = {}
-
-    for op, a1, a2, a3 in iterinstructions(input):
+    for op, a1, a2, a3 in iterinput(input):
         print(op, a1, a2, a3)
-
-        result = 0
 
         if op == 'set':
             value, destination = a1, a2
-
-            result = value
         elif op == 'not':
             source, destination = a1, a2
         else:
             left, right, destination = a1, a2, a3
-
-        circuit[destination] = result
 
     exit()

@@ -28,7 +28,7 @@ def iterpos(pos1, pos2):
             yield x, y
 
 
-def iterinstructions(input):
+def iterinput(input):
     for instruction in input.splitlines():
         instruction = instruction.replace('turn', '').replace(' through ', '-').strip()
 
@@ -42,7 +42,7 @@ def iterinstructions(input):
 def level_1(input):
     grid = {}
 
-    for action, pos1, pos2 in iterinstructions(input):
+    for action, pos1, pos2 in iterinput(input):
         if action == 'on':
             turn(grid, True, pos1, pos2)
         elif action == 'off':
@@ -58,7 +58,7 @@ def level_1(input):
 def level_2(input):
     grid = {}
 
-    for action, pos1, pos2 in iterinstructions(input):
+    for action, pos1, pos2 in iterinput(input):
         if action == 'on':
             brigthness(grid, +1, pos1, pos2)
         elif action == 'off':

@@ -1,4 +1,4 @@
-def iter_input(input):
+def iterinput(input):
     for box in input.splitlines():
         yield [int(d) for d in box.strip().split('x')]
 
@@ -6,7 +6,7 @@ def iter_input(input):
 def level_1(input):
     computed = []
 
-    for l, w, h in iter_input(input):
+    for l, w, h in iterinput(input):
         computed.append(
             2 * l * w + 2 * w * h + 2 * h * l + min([l * w, w * h, h * l])
         )
@@ -17,7 +17,7 @@ def level_1(input):
 def level_2(input):
     computed = []
 
-    for l, w, h in iter_input(input):
+    for l, w, h in iterinput(input):
         d = [l, w, h]
 
         lowest_1 = min(d)
