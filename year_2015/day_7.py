@@ -1,4 +1,4 @@
-from pprint import pprint
+import copy
 
 
 def str2int(value):
@@ -37,14 +37,10 @@ def create_wires(wires, input):
             if not isinstance(wire_id, str) or wire_id in wires:
                 continue
 
-            # id (str)
-            # signal (int, None)
-            # source (int, str, tuple, None)
-
             wires[wire_id] = {
                 'signal': None,
                 'source': None,
-                'destination': [],
+                'destinations': [],
             }
 
 
@@ -56,24 +52,24 @@ def connect_wires(wires, input):
             wires[destination]['source'] = source
 
             if isinstance(source, str):
-                wires[source]['destination'].append(destination)
+                wires[source]['destinations'].append(destination)
         elif op == 'not':
             source, destination = a1, a2
 
-            wires[destination]['source'] = (op, source)
+            wires[destination]['source'] = (op, source, None)
 
             if isinstance(source, str):
-                wires[source]['destination'].append(destination)
+                wires[source]['destinations'].append(destination)
         elif op in ('or', 'and', 'rshift', 'lshift'):
             left, right, destination = a1, a2, a3
 
             wires[destination]['source'] = (op, left, right)
 
             if isinstance(left, str):
-                wires[left]['destination'].append(destination)
+                wires[left]['destinations'].append(destination)
 
             if isinstance(right, str):
-                wires[right]['destination'].append(destination)
+                wires[right]['destinations'].append(destination)
         else:
             raise NotImplementedError(f'Unhandled op "{op}"')
 
@@ -85,21 +81,86 @@ def power_on(wires):
         if isinstance(source, int):
             wire['signal'] = source
 
-            print(wire)
+            power_on_tree(wires, wire)
+
+
+def power_on_tree(wires, wire):
+    for wire_id in wire['destinations']:
+        destination_wire = wires[wire_id]
+
+        if destination_wire['signal'] is None:
+            signal = None
+
+            if isinstance(destination_wire['source'], str):
+                source_wire_signal = wires[destination_wire['source']]['signal']
+
+                if source_wire_signal is not None:
+                    signal = source_wire_signal
+            else:
+                op, a1, a2 = destination_wire['source']
+
+                if op == 'not':
+                    source_wire_signal = wires[a1]['signal'] if isinstance(a1, str) else a1
+
+                    if source_wire_signal is not None:
+                        signal = ~ source_wire_signal
+                elif op == 'rshift':
+                    source_wire_signal_left = wires[a1]['signal'] if isinstance(a1, str) else a1
+                    source_wire_signal_right = wires[a2]['signal'] if isinstance(a2, str) else a2
+
+                    if source_wire_signal_left is not None and source_wire_signal_right is not None:
+                        signal = source_wire_signal_left >> source_wire_signal_right
+                elif op == 'lshift':
+                    source_wire_signal_left = wires[a1]['signal'] if isinstance(a1, str) else a1
+                    source_wire_signal_right = wires[a2]['signal'] if isinstance(a2, str) else a2
+
+                    if source_wire_signal_left is not None and source_wire_signal_right is not None:
+                        signal = source_wire_signal_left << source_wire_signal_right
+                elif op == 'or':
+                    source_wire_signal_left = wires[a1]['signal'] if isinstance(a1, str) else a1
+                    source_wire_signal_right = wires[a2]['signal'] if isinstance(a2, str) else a2
+
+                    if source_wire_signal_left is not None and source_wire_signal_right is not None:
+                        signal = source_wire_signal_left | source_wire_signal_right
+                elif op == 'and':
+                    source_wire_signal_left = wires[a1]['signal'] if isinstance(a1, str) else a1
+                    source_wire_signal_right = wires[a2]['signal'] if isinstance(a2, str) else a2
+
+                    if source_wire_signal_left is not None and source_wire_signal_right is not None:
+                        signal = source_wire_signal_left & source_wire_signal_right
+                else:
+                    raise NotImplementedError(f'Unhandled op "{op}"')
+
+            if signal is not None:
+                destination_wire['signal'] = signal
+
+                power_on_tree(wires, destination_wire)
 
 
 def level_1(input):
     wires = {}
 
-    # Each wire has an identifier (some lowercase letters) and can carry a 16-bit signal (a number from 0
-    # to 65535). A signal is provided to each wire by a gate, another wire, or some specific value. Each
-    # wire can only get a signal from one source, but can provide its signal to multiple destinations.
-    # A gate provides no signal until all of its inputs have a signal.
-
     create_wires(wires, input)
     connect_wires(wires, input)
     power_on(wires)
 
-    # pprint(wires)
+    return wires['a']['signal']
 
-    # return wires['a']['signal']
+
+def level_2(input):
+    wires_1 = {}
+
+    create_wires(wires_1, input)
+    connect_wires(wires_1, input)
+
+    wires_2 = copy.deepcopy(wires_1)
+
+    power_on(wires_1)
+
+    old_a_signal = wires_1['a']['signal']
+
+    wires_2['b']['source'] = old_a_signal
+
+    power_on(wires_2)
+
+    return wires_2['a']['signal']
