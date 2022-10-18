@@ -31,6 +31,11 @@ def run():
 
     answer = level_method(input)
 
+    if not answer:
+        print('No answer provided')
+
+        return
+
     print(puzzle.answer(answer, args.level))
 
 

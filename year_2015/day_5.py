@@ -30,7 +30,3 @@ def level_1(input):
     return sum([
         1 for data in input.splitlines() if is_nice_level_1(data.strip())
     ])
-
-
-def level_2(input):
-    return ''
