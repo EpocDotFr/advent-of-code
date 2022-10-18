@@ -1,5 +1,7 @@
 # Advent of Code
 
+<img src="/logo.png?raw=true" align="right">
+
 Source code of my solutions to the [Advent of Code](https://adventofcode.com/) challenges.
 
 ## Prerequisites
