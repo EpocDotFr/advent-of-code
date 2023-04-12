@@ -4,10 +4,10 @@ import argparse
 
 
 def run():
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('year', type=int, choices=list(range(2015, 2022)))
-    arg_parser.add_argument('day', type=int, choices=list(range(1, 26)))
-    arg_parser.add_argument('level', type=int, default=1, nargs='?', choices=[1, 2])
+    arg_parser = argparse.ArgumentParser(description='The Advent of Code challenge runner')
+    arg_parser.add_argument('year', type=int, choices=list(range(2015, 2022)), help='The challenge\'s year')
+    arg_parser.add_argument('day', type=int, choices=list(range(1, 26)), help='The challenge\'s day of month')
+    arg_parser.add_argument('level', type=int, default=1, nargs='?', choices=[1, 2], help='The challenge\'s "difficulty" level')
 
     args = arg_parser.parse_args()
 
