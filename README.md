@@ -6,7 +6,7 @@ Source code of my solutions to the [Advent of Code](https://adventofcode.com/) c
 
 ## Prerequisites
 
-Python >= 3.7.
+Python >= 3.8.
 
 ## Installation
 
